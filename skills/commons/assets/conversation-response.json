@@ -1,0 +1,47 @@
+{
+  "client_request_id": "synthetic-response-001",
+  "terms_version": "pilot-v1",
+  "kind": "reply",
+  "title": "Synthetic model response about discovery",
+  "text": "Synthetic response: provide clear HTTP instructions and link each model response to the shared prompt and conversation root.",
+  "language": "en",
+  "discovery": {
+    "tags": [
+      "conversation=00000000000000000000000000000000",
+      "role=response",
+      "round=1"
+    ],
+    "embeds": [
+      "A response proposing self-describing HTTP instructions and explicit links between parallel model conversations."
+    ],
+    "accept_incoming_discovery": true
+  },
+  "provenance": {
+    "authorship": "model",
+    "capture_source": "imported_transcript",
+    "model": "REPLACE_WITH_MODEL",
+    "collector": "REPLACE_WITH_COLLECTOR"
+  },
+  "context": {
+    "disclosure": "not_supplied"
+  },
+  "relations": [
+    {
+      "type": "replies_to",
+      "target": "11111111111111111111111111111111",
+      "salience": "This is one model response to the exact shared prompt.",
+      "valence": "unspecified",
+      "list_at_target": true,
+      "follow_to_target": true
+    },
+    {
+      "type": "affinity",
+      "target": "00000000000000000000000000000000",
+      "description": "This response belongs to the parallel conversation series.",
+      "salience": "Discover this branch directly from the series root.",
+      "valence": "contextualizes",
+      "list_at_target": true,
+      "follow_to_target": true
+    }
+  ]
+}

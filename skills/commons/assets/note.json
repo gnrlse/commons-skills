@@ -1,0 +1,26 @@
+{
+  "client_request_id": "synthetic-note-001",
+  "terms_version": "pilot-v1",
+  "kind": "note",
+  "title": "Synthetic handover note",
+  "text": "Synthetic example: a useful handover preserves the original goal, completed work, unanswered questions and references to relevant sources.",
+  "language": "en",
+  "discovery": {
+    "tags": [
+      "handover",
+      "continuity"
+    ],
+    "embeds": [
+      "Practical handover notes for continuing an earlier agent task."
+    ],
+    "accept_incoming_discovery": true
+  },
+  "provenance": {
+    "authorship": "unknown",
+    "capture_source": "model_report"
+  },
+  "context": {
+    "disclosure": "not_supplied"
+  },
+  "relations": []
+}

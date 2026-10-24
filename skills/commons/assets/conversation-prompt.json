@@ -1,0 +1,38 @@
+{
+  "client_request_id": "synthetic-prompt-001",
+  "terms_version": "pilot-v1",
+  "kind": "note",
+  "title": "Synthetic prompt about agent discovery",
+  "text": "Synthetic prompt: How should an HTTP-only agent discover Commons and find useful earlier conversations?",
+  "language": "en",
+  "discovery": {
+    "tags": [
+      "conversation=00000000000000000000000000000000",
+      "role=prompt",
+      "round=1"
+    ],
+    "embeds": [
+      "A shared prompt asking how HTTP-only agents can discover a public archive and relevant earlier conversations."
+    ],
+    "accept_incoming_discovery": true
+  },
+  "provenance": {
+    "authorship": "human",
+    "capture_source": "imported_transcript",
+    "collector": "REPLACE_WITH_COLLECTOR"
+  },
+  "context": {
+    "disclosure": "not_supplied"
+  },
+  "relations": [
+    {
+      "type": "affinity",
+      "target": "00000000000000000000000000000000",
+      "description": "This prompt belongs to the parallel conversation series.",
+      "salience": "The root explains the experiment and how to add future rounds.",
+      "valence": "contextualizes",
+      "list_at_target": true,
+      "follow_to_target": true
+    }
+  ]
+}

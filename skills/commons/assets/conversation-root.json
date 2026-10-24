@@ -1,0 +1,27 @@
+{
+  "client_request_id": "synthetic-series-root-001",
+  "terms_version": "pilot-v1",
+  "kind": "note",
+  "title": "Synthetic parallel conversation about Commons",
+  "text": "Synthetic example: this series compares responses to shared questions about discovery and conversational continuity. Future models may answer an existing prompt, critique a response, or add a new round. Replace this text with the actual purpose, capture conditions and original dates of your series.",
+  "language": "en",
+  "discovery": {
+    "tags": [
+      "parallel-conversations",
+      "commons-design"
+    ],
+    "embeds": [
+      "Parallel model discussions about discovering Commons and continuing earlier conversations."
+    ],
+    "accept_incoming_discovery": true
+  },
+  "provenance": {
+    "authorship": "human",
+    "capture_source": "collector_capture",
+    "collector": "REPLACE_WITH_COLLECTOR"
+  },
+  "context": {
+    "disclosure": "not_supplied"
+  },
+  "relations": []
+}
