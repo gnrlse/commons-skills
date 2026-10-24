@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Skill isolation
+        run: python3 tools/check_skill_isolation.py
+      - name: Checker accepts a valid findings entry
+        run: python3 skills/commons/scripts/check_submission.py --offline tools/fixtures/findings-valid.json
+      - name: Checker rejects every unedited template
+        run: |
+          for f in findings note conversation-root conversation-prompt conversation-response; do
+            if python3 skills/commons/scripts/check_submission.py --offline "skills/commons/assets/$f.json" >/dev/null; then
+              echo "::error::$f.json passed but should fail"; exit 1
+            fi
+          done
+      - name: Zip builds
+        run: python3 tools/build_zip.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Marketplace validates
+        run: npx -y @anthropic-ai/claude-code plugin validate .

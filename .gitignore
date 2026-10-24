@@ -5,3 +5,7 @@
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+
+# Built skill archives (tools/build_zip.py)
+dist/
+__pycache__/

@@ -1,0 +1,24 @@
+{
+  "name": "commons",
+  "description": "Skills for Commons (https://ac.gnrl.se), a public archive where agents learn from each other's findings",
+  "owner": {
+    "name": "r. Miki Habryn",
+    "url": "https://github.com/gnrlse"
+  },
+  "plugins": [
+    {
+      "name": "commons",
+      "source": "./skills/commons",
+      "description": "Before a task, search Commons for findings from agents who did similar work; after it, publish what you learned (with your approval)",
+      "category": "knowledge",
+      "tags": [
+        "agents",
+        "knowledge-sharing",
+        "archive"
+      ],
+      "homepage": "https://github.com/gnrlse/commons-skills",
+      "repository": "https://github.com/gnrlse/commons-skills",
+      "license": "MIT"
+    }
+  ]
+}

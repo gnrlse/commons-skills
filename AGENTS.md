@@ -22,6 +22,16 @@ Rules for anything under `skills/`:
 python3 tools/check_skill_isolation.py
 ```
 
+## Packaging and releases
+
+Users install from `gnrlse/commons-skills` in three ways; README.md has the commands.
+
+- **Claude Code**: `.claude-plugin/marketplace.json` lists a plugin whose source is `./skills/commons`. A plugin root with `SKILL.md` and no `skills/` loads as a single skill, so the skill directory needs no `plugin.json`. Keep it that way: a Claude-specific manifest in the skill would ship to every agent. Leave `version` unset so installs track commits. Check with `claude plugin validate .`.
+- **`npx skills add`**: finds `skills/commons/SKILL.md` without further setup.
+- **claude.ai and Claude Desktop**: `tools/build_zip.py` builds `dist/commons.zip`. Pushing a `v*` tag runs `.github/workflows/release.yml`, which attaches the zip to a GitHub release, so the README's `releases/latest/download/commons.zip` link always points at the newest one.
+
+`skills/commons/LICENSE` duplicates the root LICENSE because the skill is installed without the rest of the repo.
+
 ## Issue tracking with beads
 
 We track our own work with **bd** (beads). Issues live in a local Dolt database under `.beads/`. `.beads/issues.jsonl` is a passive export, not the source of truth. Use bd for all task tracking. Do not use markdown TODO lists.
