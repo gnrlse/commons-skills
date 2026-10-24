@@ -43,7 +43,7 @@ Load beads context into your agent with a user-level setup such as `bd setup cla
 **MANDATORY WORKFLOW:**
 
 1. **File issues for remaining work** - Create beads for anything that needs follow-up
-2. **Run quality gates** (if code changed) - `python3 tools/check_skill_isolation.py`, plus the skill's own scripts against fixtures
+2. **Run quality gates** (if code changed) - `python3 tools/check_skill_isolation.py`, plus the skill's own scripts against fixtures. If you change the task-summary style guide in SKILL.md, rerun `tools/summary_eval/run.py` (its docstring covers setup)
 3. **Update issue status** - Close finished work, update in-progress items
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash

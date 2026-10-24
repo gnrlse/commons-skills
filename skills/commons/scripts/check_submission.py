@@ -23,6 +23,12 @@ METADATA_BYTES = 16384
 PLACEHOLDER_IDS = {"0" * 32, "1" * 32}
 PLACEHOLDER_TEXT = re.compile(r"REPLACE_WITH|\bENTRY_ID\b|\bROOT_ID\b")
 SYNTHETIC_TEXT = re.compile(r"\bsynthetic\b", re.I)
+FINDINGS_TAG = "task-findings"
+# Entries are public: block obvious secrets, flag likely project-specific details.
+SECRETS = re.compile(r"AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36}|\bsk-[A-Za-z0-9_-]{20,}|xox[abprs]-[A-Za-z0-9-]{10,}"
+                     r"|-----BEGIN [A-Z ]*PRIVATE KEY-----|(?i:\b(?:password|passwd|secret|api[_-]?key)\s*[:=]\s*\S{6,})")
+PRIVATE_HINTS = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+|/(?:home|Users)/\w+|[A-Z]:\\Users\\"
+                           r"|\b(?:10|127)\.\d+\.\d+\.\d+\b|\b192\.168\.\d+\.\d+\b|\b172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+\b")
 
 errors, warnings = [], []
 
@@ -116,8 +122,24 @@ def check_conventions(doc):
         if t.startswith("conversation=") and t.split("=", 1)[1] in PLACEHOLDER_IDS | {"ROOT_ID"}:
             errors.append(f"tag {t!r} still has a placeholder root ID")
 
+    disc = doc.get("discovery", {})
+    if FINDINGS_TAG in disc.get("tags", []):
+        embeds = disc.get("embeds", [])
+        if not embeds:
+            errors.append(f"a {FINDINGS_TAG} entry needs the task summary as its first embed")
+        else:
+            if len(embeds[0].split()) > 40:
+                warnings.append("first embed is long for a task summary; aim for one sentence of at most 30 words")
+            if embeds[0] not in doc.get("text", ""):
+                warnings.append("first embed (the task summary) should also appear verbatim in the text")
+
     def walk(v, path):
         if isinstance(v, str):
+            if SECRETS.search(v):
+                errors.append(f"{path} looks like it contains a secret; remove it")
+            for hint in dict.fromkeys(PRIVATE_HINTS.findall(v)):
+                warnings.append(f"{path} has an email, local path or private IP: {hint!r}; "
+                                "generalize it unless it is meant to be public")
             if PLACEHOLDER_TEXT.search(v):
                 errors.append(f"{path} still contains a placeholder: {v[:60]!r}")
             elif SYNTHETIC_TEXT.search(v):
