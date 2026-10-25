@@ -24,6 +24,16 @@ PLACEHOLDER_IDS = {"0" * 32, "1" * 32}
 PLACEHOLDER_TEXT = re.compile(r"REPLACE_WITH|\bENTRY_ID\b|\bROOT_ID\b")
 SYNTHETIC_TEXT = re.compile(r"\bsynthetic\b", re.I)
 FINDINGS_TAG = "task-findings"
+# Label vocabularies from the commons-request and software-feedback-v1 conventions.
+LABEL_VALUES = {
+    "request": {"feature", "convention", "bug"},
+    "request-status": {"accepted", "declined", "shipped"},
+    "feedback": {"feature", "bug", "commentary", "convention"},
+}
+VERSION_LABEL = re.compile(r"^git-(commit|tree)=(.*)$")
+FULL_HASH = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
+VERIFICATION = {"followed-and-passed", "independent-reproduction", "falsification-test",
+                "reasoning-only", "not-verified"}
 # Entries are public: block obvious secrets, flag likely project-specific details.
 SECRETS = re.compile(r"AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36}|\bsk-[A-Za-z0-9_-]{20,}|xox[abprs]-[A-Za-z0-9-]{10,}"
                      r"|-----BEGIN [A-Z ]*PRIVATE KEY-----|(?i:\b(?:password|passwd|secret|api[_-]?key)\s*[:=]\s*\S{6,})")
@@ -132,6 +142,20 @@ def check_conventions(doc):
                 warnings.append("first embed is long for a task summary; aim for one sentence of at most 30 words")
             if embeds[0] not in doc.get("text", ""):
                 warnings.append("first embed (the task summary) should also appear verbatim in the text")
+        if "## How to check this" not in doc.get("text", ""):
+            warnings.append("findings should say how a reader can check them: add a '## How to check this' section")
+    check_labels(disc.get("tags", []))
+    for r in doc.get("relations", []):
+        if not isinstance(r, dict):
+            continue
+        salience = str(r.get("salience", ""))
+        method = re.match(r"verification:\s*([\w-]+)", salience)
+        if method and method.group(1) not in VERIFICATION:
+            warnings.append(f"relation to {r.get('target')}: unknown verification method {method.group(1)!r}; "
+                            f"use one of {sorted(VERIFICATION)}")
+        elif not method and r.get("valence") in ("supports", "challenges"):
+            warnings.append(f"relation to {r.get('target')} {r.get('valence')} it: start salience with "
+                            "'verification: <method>.' to say how you checked")
 
     def walk(v, path):
         if isinstance(v, str):
@@ -153,6 +177,35 @@ def check_conventions(doc):
     if str(doc.get("client_request_id", "")).startswith(("synthetic-", "example-")):
         errors.append("client_request_id is still the template value")
     walk({k: v for k, v in doc.items() if k != "client_request_id"}, "$")
+
+
+def check_labels(tags):
+    """Shape of the request, feedback and version labels the conventions define."""
+    keyed = {}
+    for t in tags:
+        key, _, value = t.partition("=")
+        keyed.setdefault(key, []).append(value)
+        if key in LABEL_VALUES and value not in LABEL_VALUES[key]:
+            warnings.append(f"label {t!r}: expected {key}= one of {sorted(LABEL_VALUES[key])}")
+        version = VERSION_LABEL.match(t)
+        if version and not FULL_HASH.match(version.group(2)):
+            errors.append(f"label {t!r}: use the full lowercase hash (40 or 64 hex digits), not a short or tag name")
+        if key == "software":
+            if not re.match(r"^https://[^\s?#]+$", value) or value.endswith(("/", ".git")):
+                errors.append(f"label {t!r}: use the canonical https URL of the project root, "
+                              "with no trailing slash, .git, query or fragment")
+    if "software-feedback" in tags:
+        if not keyed.get("software"):
+            errors.append("a software-feedback entry needs a software=<project URL> label")
+        if len(keyed.get("feedback", [])) != 1:
+            errors.append("a software-feedback entry needs exactly one feedback=feature|bug|commentary|convention label")
+        if "feedback-convention=software-feedback-v1" not in tags:
+            warnings.append("add feedback-convention=software-feedback-v1 so readers can find the convention version")
+        if not keyed.get("git-commit") and not keyed.get("git-tree"):
+            warnings.append("say which version this is about: add git-commit=<full hash> (or git-tree=<hash> "
+                            "for an installed copy), or explain in the text why you can't")
+    if "commons-request" in tags and len(keyed.get("request", [])) > 1:
+        warnings.append("a commons-request entry should carry exactly one request= type label")
 
 
 def main():

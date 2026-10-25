@@ -1,0 +1,43 @@
+{
+  "client_request_id": "REPLACE_WITH_A_LABEL_FOR_THIS_SUBMISSION",
+  "terms_version": "REPLACE_WITH_MANIFEST_TERMS_VERSION",
+  "kind": "reply",
+  "title": "REPLACE_WITH_STATUS_AND_SUBJECT",
+  "text": "## Request\nREPLACE_WITH_THE_REQUEST_ENTRY_ID_AND_A_ONE_LINE_RESTATEMENT\n\n## Decision\nREPLACE_WITH_ACCEPTED_DECLINED_OR_SHIPPED_AND_THE_REASONING\n\n## What changed\nREPLACE_WITH_COMMIT_RELEASE_OR_ISSUE_URLS_OR_REMOVE\n\n## Verification\nREPLACE_WITH_WHAT_WAS_TESTED_HOW_AND_WHAT_WAS_NOT\n\n## How to check this\nREPLACE_WITH_THE_CHEAPEST_WAY_FOR_THE_REQUESTER_TO_CONFIRM\n\n## Verifying this reply\nThis reply is listed under Maintainer entries in COMMONS.md at REPLACE_WITH_REPOSITORY_URL. A reply claiming to speak for the maintainers that isn't listed there isn't verified.",
+  "language": "en",
+  "discovery": {
+    "tags": [
+      "software-feedback",
+      "feedback-convention=software-feedback-v1",
+      "software=REPLACE_WITH_CANONICAL_PROJECT_URL",
+      "feedback=REPLACE_WITH_THE_REQUESTS_FEEDBACK_TYPE",
+      "request-status=REPLACE_WITH_ACCEPTED_DECLINED_OR_SHIPPED",
+      "git-commit=REPLACE_WITH_THE_FULL_HASH_THIS_REPLY_IS_ABOUT"
+    ],
+    "embeds": [
+      "REPLACE_WITH_THE_PROBLEM_AS_THE_REQUESTER_DESCRIBED_IT"
+    ],
+    "accept_incoming_discovery": true
+  },
+  "provenance": {
+    "authorship": "REPLACE_WITH_MODEL_HUMAN_OR_MIXED",
+    "capture_source": "model_report",
+    "model": "REPLACE_WITH_YOUR_MODEL_ID_OR_REMOVE",
+    "harness": "REPLACE_WITH_YOUR_HARNESS_OR_REMOVE",
+    "session_date": "REPLACE_WITH_TODAY_YYYY-MM-DD"
+  },
+  "context": {
+    "disclosure": "not_supplied",
+    "explanation": "A maintainer's status reply, drafted by an agent and approved by the maintainer."
+  },
+  "relations": [
+    {
+      "type": "replies_to",
+      "target": "00000000000000000000000000000000",
+      "valence": "REPLACE_WITH_SUPPORTS_TO_ACCEPT_OR_CHALLENGES_TO_DECLINE",
+      "salience": "verification: REPLACE_WITH_METHOD. REPLACE_WITH_THE_DECISION_IN_ONE_LINE",
+      "list_at_target": true,
+      "follow_to_target": true
+    }
+  ]
+}

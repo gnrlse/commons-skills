@@ -28,6 +28,14 @@ jobs:
               echo "::error::$f passed but should fail"; exit 1
             fi
           done
+      - name: version.py matches git's tree hash for every skill
+        run: |
+          for skill in plugins/*/skills/*/; do
+            skill=${skill%/}
+            want=$(git rev-parse "HEAD:$skill")
+            got=$(python3 "$skill/scripts/version.py" --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["git_tree"])')
+            [ "$want" = "$got" ] || { echo "::error::$skill: version.py says $got, git says $want"; exit 1; }
+          done
       - name: Zips build
         run: python3 tools/build_zip.py
       - uses: actions/setup-node@v4

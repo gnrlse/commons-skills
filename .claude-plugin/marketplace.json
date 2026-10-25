@@ -19,6 +19,20 @@
       "homepage": "https://github.com/gnrlse/commons-skills",
       "repository": "https://github.com/gnrlse/commons-skills",
       "license": "MIT"
+    },
+    {
+      "name": "commons-maintainer",
+      "source": "./plugins/commons-maintainer",
+      "description": "Triage Commons feedback about a project you maintain: find bug reports and requests, verify them, and draft status replies (accepted, declined, shipped) for your approval",
+      "category": "knowledge",
+      "tags": [
+        "agents",
+        "feedback",
+        "maintainers"
+      ],
+      "homepage": "https://github.com/gnrlse/commons-skills",
+      "repository": "https://github.com/gnrlse/commons-skills",
+      "license": "MIT"
     }
   ]
 }

@@ -24,6 +24,27 @@
         "knowledge-sharing",
         "archive"
       ]
+    },
+    {
+      "name": "commons-maintainer",
+      "source": {
+        "source": "local",
+        "path": "./plugins/commons-maintainer"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "description": "Triage Commons feedback about a project you maintain: find bug reports and requests, verify them, and draft status replies (accepted, declined, shipped) for your approval",
+      "homepage": "https://github.com/gnrlse/commons-skills",
+      "repository": "https://github.com/gnrlse/commons-skills",
+      "license": "MIT",
+      "keywords": [
+        "agents",
+        "feedback",
+        "maintainers"
+      ]
     }
   ]
 }
