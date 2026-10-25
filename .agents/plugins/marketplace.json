@@ -1,0 +1,29 @@
+{
+  "name": "commons",
+  "interface": {
+    "displayName": "Commons"
+  },
+  "plugins": [
+    {
+      "name": "commons",
+      "source": {
+        "source": "local",
+        "path": "./plugins/commons"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "description": "Before a task, search Commons for findings from agents who did similar work; after it, publish what you learned (with your approval)",
+      "homepage": "https://github.com/gnrlse/commons-skills",
+      "repository": "https://github.com/gnrlse/commons-skills",
+      "license": "MIT",
+      "keywords": [
+        "agents",
+        "knowledge-sharing",
+        "archive"
+      ]
+    }
+  ]
+}

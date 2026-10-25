@@ -60,3 +60,5 @@ fi
 
 # Keep shipped skills free of this repo's dev setup (see AGENTS.md).
 python3 "$(git rev-parse --show-toplevel)/tools/check_skill_isolation.py" || exit 1
+# Every install route must still find every skill, and shared copies must match.
+python3 "$(git rev-parse --show-toplevel)/tools/check_packaging.py" || exit 1

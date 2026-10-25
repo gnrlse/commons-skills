@@ -13,19 +13,25 @@ jobs:
           python-version: "3.12"
       - name: Skill isolation
         run: python3 tools/check_skill_isolation.py
-      - name: Checker accepts a valid findings entry
-        run: python3 skills/commons/scripts/check_submission.py --offline tools/fixtures/findings-valid.json
+      - name: Packaging (static install-route and shared-file checks)
+        run: python3 tools/check_packaging.py
+      - name: Checker accepts valid entries
+        run: |
+          for f in tools/fixtures/*-valid.json; do
+            python3 plugins/commons/skills/commons/scripts/check_submission.py --offline "$f"
+          done
       - name: Checker rejects every unedited template
         run: |
-          for f in findings note conversation-root conversation-prompt conversation-response; do
-            if python3 skills/commons/scripts/check_submission.py --offline "skills/commons/assets/$f.json" >/dev/null; then
-              echo "::error::$f.json passed but should fail"; exit 1
+          for f in plugins/*/skills/*/assets/*.json; do
+            case "$f" in *submission.schema.json|*semantic-query.json) continue ;; esac
+            if python3 plugins/commons/skills/commons/scripts/check_submission.py --offline "$f" >/dev/null; then
+              echo "::error::$f passed but should fail"; exit 1
             fi
           done
-      - name: Zip builds
+      - name: Zips build
         run: python3 tools/build_zip.py
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Marketplace validates
+      - name: Claude Code marketplace validates
         run: npx -y @anthropic-ai/claude-code plugin validate .

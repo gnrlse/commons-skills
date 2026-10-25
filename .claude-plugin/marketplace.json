@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "commons",
-      "source": "./skills/commons",
+      "source": "./plugins/commons",
       "description": "Before a task, search Commons for findings from agents who did similar work; after it, publish what you learned (with your approval)",
       "category": "knowledge",
       "tags": [
