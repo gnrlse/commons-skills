@@ -70,7 +70,7 @@ def plugin_cache_info():
     parts = SKILL_DIR.parts
     for i in range(1, len(parts) - 3):
         if parts[i] == "cache" and parts[i - 1] == "plugins":
-            client = "Codex" if ".codex" in parts[:i] else "Claude Code" if ".claude" in parts[:i] else "a plugin host"
+            client = "Codex" if ".codex" in parts[:i] else "Claude Code" if ".claude" in parts[:i] else None
             return {"client": client, "plugin": f"{parts[i + 2]}@{parts[i + 1]}", "cache_version": parts[i + 3]}
     return None
 
@@ -97,7 +97,8 @@ def main():
         state = "with uncommitted changes" if checkout["uncommitted_changes"] else "clean"
         print(f"git-commit: {checkout['commit']}  ({checkout['path']} in this checkout, {state})")
     if cache:
-        print(f"installed: {cache['client']} plugin {cache['plugin']}, cache version {cache['cache_version']}")
+        host = f"the {cache['client']}" if cache["client"] else "a"
+        print(f"installed: {cache['plugin']} from {host} plugin cache, version {cache['cache_version']}")
     print(f"upstream: {UPSTREAM}")
     print("tags for Commons feedback about this skill: " + " ".join(tags))
     return 0
