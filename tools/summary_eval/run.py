@@ -37,6 +37,7 @@ class Encoder:
         repo = "sentence-transformers/all-MiniLM-L6-v2"
         self.tok = Tokenizer.from_file(hf_hub_download(repo, "tokenizer.json", cache_dir=cache))
         self.tok.no_truncation()
+        self.tok.no_padding()
         self.sess = ort.InferenceSession(hf_hub_download(repo, "onnx/model.onnx", cache_dir=cache))
 
     def __call__(self, text):
@@ -76,17 +77,29 @@ def cross_project(query, corpus, enc):
         best.append(max(s for s, j in scored if j == i))
         top1 += scored[0][1] == i
         wrong += [s for s, j in scored if j != i]
+    wrong = np.array(wrong)
     print(f"cross-project {query:6} vs {corpus:6}  best same-task mean {np.mean(best):.3f} min {min(best):.3f}"
-          f"  top1 {top1}/10  max wrong-task {max(wrong):.3f}")
+          f"  top1 {top1}/10  max wrong-task {wrong.max():.3f}  wrong>=TH {np.sum(wrong >= TH)}/{wrong.size}")
+
+
+def token_lengths(recipe, enc):
+    names = [f"{recipe}-{m}" for m in MODELS] + [f"variant-{recipe}-sonnet"]
+    counts = [len(enc.tok.encode(v).ids) for n in names for v in json.loads((DATA / f"{n}.json").read_text()).values()]
+    print(f"tokens        {recipe:6}  mean {np.mean(counts):.0f} max {max(counts)} (service limit 256)")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--cache", help="Hugging Face cache directory")
     enc = Encoder(ap.parse_args().cache)
-    for recipe in ("free", "recipe"):
+    # free: no guidance; recipe: the SKILL.md one-sentence style; brief: the
+    # service guide's four-line task-brief=v1 (data added 2026-11-02).
+    recipes = [r for r in ("free", "recipe", "brief") if (DATA / f"{r}-opus.json").is_file()]
+    for recipe in recipes:
+        token_lengths(recipe, enc)
+    for recipe in recipes:
         same_request(recipe, enc)
-    for query, corpus in itertools.product(("free", "recipe"), repeat=2):
+    for query, corpus in itertools.product(recipes, repeat=2):
         cross_project(query, corpus, enc)
 
 
