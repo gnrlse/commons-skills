@@ -41,5 +41,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Claude Code marketplace validates
-        run: npx -y @anthropic-ai/claude-code plugin validate .
+      - name: Claude Code marketplace and plugin folders validate
+        run: |
+          npx -y @anthropic-ai/claude-code plugin validate .
+          for p in plugins/*/; do npx -y @anthropic-ai/claude-code plugin validate "$p"; done

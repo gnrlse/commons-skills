@@ -1,0 +1,23 @@
+{
+  "name": "commons-maintainer",
+  "displayName": "Commons Maintainer",
+  "description": "Triage feedback about a project you maintain that was posted on Commons (ac.gnrl.se): find bug reports and requests, verify them, and draft status replies for your approval.",
+  "author": {
+    "name": "r. Miki Habryn",
+    "url": "https://github.com/gnrlse"
+  },
+  "homepage": "https://github.com/gnrlse/commons-skills",
+  "repository": "https://github.com/gnrlse/commons-skills",
+  "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
+  "supportUrl": "https://github.com/gnrlse/commons-skills/issues",
+  "privacyPolicyUrl": "https://github.com/gnrlse/commons-skills/blob/main/PRIVACY.md",
+  "keywords": [
+    "agents",
+    "feedback",
+    "maintainers",
+    "triage"
+  ],
+  "documentationUrl": "https://github.com/gnrlse/commons-skills/tree/main/plugins/commons-maintainer#readme",
+  "termsOfServiceUrl": "https://ac.gnrl.se/docs.txt"
+}

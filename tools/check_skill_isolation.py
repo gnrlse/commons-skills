@@ -5,7 +5,9 @@ Skills live at plugins/<plugin>/skills/<skill>/ and are installed on their
 own into other agents' environments, so each must not mention our tooling
 (beads/bd), reference local paths, link to files outside itself, or carry
 executable bits (installers don't preserve them consistently, and version.py
-assumes none). Each plugin directory may contain only its skills/ folder.
+assumes none). A plugin directory ships too, so it may hold only skills/,
+.claude-plugin/ (plugin.json and icon.png), README.md and LICENSE, and the
+same text checks apply to those files.
 Run from anywhere:
 
     python3 tools/check_skill_isolation.py
@@ -33,9 +35,60 @@ def skill_dirs():
     return sorted(p.parent for p in PLUGINS.glob("*/skills/*/SKILL.md"))
 
 
+PLUGIN_ENTRIES = {"skills", ".claude-plugin", "README.md", "LICENSE"}
+MANIFEST_ENTRIES = {"plugin.json", "icon.png"}
+
+
+def check_text(path, label):
+    """Forbidden patterns in any shipped text file."""
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return problems
+    if "\r\n" in text:
+        problems.append(f"{label}: CRLF line endings")
+    for lineno, line in enumerate(text.splitlines(), 1):
+        for pattern, why in FORBIDDEN:
+            if pattern.search(line):
+                problems.append(f"{label}:{lineno}: {why}: {line.strip()[:80]}")
+    return problems
+
+
+def check_links(path, root, label):
+    """Relative markdown links must resolve inside root, which ships on its own."""
+    problems = []
+    for target in LINK.findall(path.read_text(encoding="utf-8")):
+        if re.match(r"[a-z][a-z0-9+.-]*:|#", target, re.I):
+            continue  # URL, mailto: or in-page anchor
+        dest = (path.parent / target.split("#")[0]).resolve()
+        if not dest.is_relative_to(root.resolve()):
+            problems.append(f"{label}: link {target!r} leaves {root.relative_to(ROOT)}")
+        elif not dest.exists():
+            problems.append(f"{label}: link {target!r} is broken")
+    return problems
+
+
 def check_plugin(plugin):
-    extra = sorted(p.name for p in plugin.iterdir() if p.name != "skills")
-    return [f"{plugin.name}: plugin directory may contain only skills/, found {extra}"] if extra else []
+    """A plugin folder ships too: only its skills, manifest, icon, README and LICENSE."""
+    problems = []
+    extra = sorted(p.name for p in plugin.iterdir() if p.name not in PLUGIN_ENTRIES)
+    if extra:
+        problems.append(f"{plugin.name}: plugin directory may contain only {sorted(PLUGIN_ENTRIES)}, found {extra}")
+    manifest_dir = plugin / ".claude-plugin"
+    if manifest_dir.is_dir():
+        extra = sorted(p.name for p in manifest_dir.iterdir() if p.name not in MANIFEST_ENTRIES)
+        if extra:
+            problems.append(f"{plugin.name}/.claude-plugin: may contain only {sorted(MANIFEST_ENTRIES)}, found {extra}")
+    for rel in ("README.md", "LICENSE", ".claude-plugin/plugin.json"):
+        path = plugin / rel
+        if path.is_symlink():
+            problems.append(f"{plugin.name}/{rel}: symlinks don't survive every installer")
+        elif path.is_file():
+            problems += check_text(path, f"{plugin.name}/{rel}")
+    if (plugin / "README.md").is_file():
+        problems += check_links(plugin / "README.md", plugin, f"{plugin.name}/README.md")
+    return problems
 
 
 def check_skill(skill):
@@ -63,25 +116,9 @@ def check_skill(skill):
             continue
         if path.stat().st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH):
             problems.append(f"{rel}: executable bit set; run scripts with python3 instead")
-        try:
-            text = path.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            continue
-        if "\r\n" in text:
-            problems.append(f"{rel}: CRLF line endings")
-        for lineno, line in enumerate(text.splitlines(), 1):
-            for pattern, why in FORBIDDEN:
-                if pattern.search(line):
-                    problems.append(f"{rel}:{lineno}: {why}: {line.strip()[:80]}")
+        problems += check_text(path, str(rel))
         if path.suffix == ".md":
-            for target in LINK.findall(text):
-                if re.match(r"[a-z][a-z0-9+.-]*:|#", target, re.I):
-                    continue  # URL, mailto: or in-page anchor
-                dest = (path.parent / target.split("#")[0]).resolve()
-                if not dest.is_relative_to(skill.resolve()):
-                    problems.append(f"{rel}: link {target!r} leaves the skill directory")
-                elif not dest.exists():
-                    problems.append(f"{rel}: link {target!r} is broken")
+            problems += check_links(path, skill, str(rel))
     return problems
 
 

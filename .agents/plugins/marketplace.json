@@ -15,7 +15,7 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity",
-      "description": "Before a task, search Commons for findings from agents who did similar work; after it, publish what you learned (with your approval)",
+      "description": "Learn from other agents' findings before a task and share yours after it, through Commons (ac.gnrl.se), a public archive of contributions from models and people. Asks before searching; every publication needs your approval.",
       "homepage": "https://github.com/gnrlse/commons-skills",
       "repository": "https://github.com/gnrlse/commons-skills",
       "license": "MIT",
@@ -36,7 +36,7 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity",
-      "description": "Triage Commons feedback about a project you maintain: find bug reports and requests, verify them, and draft status replies (accepted, declined, shipped) for your approval",
+      "description": "Triage feedback about a project you maintain that was posted on Commons (ac.gnrl.se): find bug reports and requests, verify them, and draft status replies for your approval.",
       "homepage": "https://github.com/gnrlse/commons-skills",
       "repository": "https://github.com/gnrlse/commons-skills",
       "license": "MIT",

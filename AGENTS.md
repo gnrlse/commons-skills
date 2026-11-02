@@ -6,7 +6,8 @@ This repository develops and ships two agent skills for [Commons](https://ac.gnr
 
 | Path | Audience | Ships? |
 | --- | --- | --- |
-| `plugins/<name>/skills/<name>/` | Agents that install the skill | **Yes**. Each skill is installed on its own, without the rest of the repo |
+| `plugins/<name>/` | Agents and the plugin directory | **Yes**. Plugin installs (Claude Code, Codex, the directory) get the whole plugin folder |
+| `plugins/<name>/skills/<name>/` | Agents that install just the skill | **Yes**. `npx skills`, zips and manual copies get only this folder |
 | `.claude-plugin/`, `.agents/plugins/` | Claude Code and Codex marketplaces | Read by installers, not installed |
 | Everything else (`.beads/`, `tools/`, `docs/`, this file, `CLAUDE.md`, `COMMONS.md`) | Contributors and readers of this repo | No |
 
@@ -15,7 +16,7 @@ Rules for anything under `plugins/`:
 - Keep each skill self-contained. Its links must resolve inside its own directory, and it must not depend on repo-level files.
 - Never mention our development tooling: no beads, `bd`, `AGENTS.md` or `CLAUDE.md`. Users of the skill may not use any of it.
 - No local absolute paths, symlinks, executable bits or CRLF line endings. Installers don't preserve the first three consistently, and `scripts/version.py` hashes the skill directory the way git does, so every byte must match the repository.
-- A plugin directory contains only `skills/`. Don't add a `plugin.json`: the marketplace entries carry the metadata, and Codex builds a manifest from its entry.
+- A plugin directory contains only `skills/`, `.claude-plugin/` (`plugin.json` and `icon.png`), `README.md` and `LICENSE`. `plugin.json` is what lists a plugin in the directory beyond Claude Code; Codex reads it too. Keep its `name` equal to the marketplace entry name.
 - Repo-wide tooling goes in `tools/`, not in a skill's `scripts/`. A skill's `scripts/` ships to users.
 
 The pre-commit hook runs both checks, and you can also run them directly:
@@ -27,7 +28,7 @@ python3 tools/check_packaging.py         # every install route finds every skill
 
 ## Shared files
 
-Some files exist in both skills, because each skill installs alone and links don't survive installers. The source of truth is `plugins/commons/skills/commons/`. Edit there, then run `python3 tools/sync_shared.py` to copy into the other skills. The list is in that script, and `check_packaging.py` fails if a copy drifts.
+Some files exist in several shipped places, because each plugin and each skill installs alone and links don't survive installers. The sources of truth are the root `LICENSE` and `plugins/commons/skills/commons/` for shared scripts. Edit there, then run `python3 tools/sync_shared.py` to copy into the other skills. The list is in that script, and `check_packaging.py` fails if a copy drifts.
 
 ## Packaging and releases
 
@@ -39,7 +40,8 @@ Users install from `gnrlse/commons-skills`; README.md has the commands.
 - **The skills CLI** (`npx skills add`) searches `<source>/skills/` for each local plugin entry in the Claude marketplace file.
 - **claude.ai and Claude Desktop:** `tools/build_zip.py` builds `dist/<skill>.zip` for each skill. Pushing a `v*` tag runs `.github/workflows/release.yml`, which attaches the zips to a GitHub release, so the README's `releases/latest/download/<skill>.zip` links always point at the newest ones.
 - **Versions:** leave `version` unset in both marketplaces. Claude Code then tracks commits, and Codex reinstalls on `codex plugin marketplace upgrade`.
-- **Licenses:** each skill's `LICENSE` duplicates the root LICENSE, because each skill installs without the rest of the repo.
+- **Licenses:** each plugin's and each skill's `LICENSE` duplicates the root LICENSE, because each installs without the rest of the repo.
+- **Anthropic's plugin directory:** each plugin folder is its own submission at claude.ai/directory/manage, with the plugin path `plugins/<name>`. The plugin's `README.md` is the listing text, and the security scan rejects behaviour it doesn't disclose, so keep its "What it sends, and where" table and PRIVACY.md in step with the scripts. The listing icon is captured once, at the first save in the portal: change `tools/make_icon.py` and rerun it before that, never after. `version` stays unset (the portal warns, and accepts it). Run `claude plugin validate plugins/<name>` to see the directory checks the CLI can run.
 
 ## Maintaining this project on Commons
 
@@ -72,7 +74,7 @@ Load beads context into your agent with a user-level setup such as `bd setup cla
 **MANDATORY WORKFLOW:**
 
 1. **File issues for remaining work** - Create beads for anything that needs follow-up
-2. **Run quality gates** (if code changed) - `python3 tools/check_skill_isolation.py` and `python3 tools/check_packaging.py`, plus the skills' own scripts against fixtures. If you change the task-summary style guide in SKILL.md, rerun `tools/summary_eval/run.py` (its docstring covers setup)
+2. **Run quality gates** (if code changed) - `python3 tools/check_skill_isolation.py` and `python3 tools/check_packaging.py`, plus the skills' own scripts against fixtures. If you change the task-summary style guide in SKILL.md, or the service's task-loop convention changes, rerun `tools/summary_eval/run.py` (its docstring covers setup)
 3. **Update issue status** - Close finished work, update in-progress items
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash

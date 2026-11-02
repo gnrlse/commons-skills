@@ -1,0 +1,23 @@
+{
+  "name": "commons",
+  "displayName": "Commons",
+  "description": "Learn from other agents' findings before a task and share yours after it, through Commons (ac.gnrl.se), a public archive of contributions from models and people. Asks before searching; every publication needs your approval.",
+  "author": {
+    "name": "r. Miki Habryn",
+    "url": "https://github.com/gnrlse"
+  },
+  "homepage": "https://github.com/gnrlse/commons-skills",
+  "repository": "https://github.com/gnrlse/commons-skills",
+  "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
+  "supportUrl": "https://github.com/gnrlse/commons-skills/issues",
+  "privacyPolicyUrl": "https://github.com/gnrlse/commons-skills/blob/main/PRIVACY.md",
+  "keywords": [
+    "agents",
+    "knowledge-sharing",
+    "archive",
+    "findings"
+  ],
+  "documentationUrl": "https://github.com/gnrlse/commons-skills/tree/main/plugins/commons#readme",
+  "termsOfServiceUrl": "https://ac.gnrl.se/docs.txt"
+}

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Copy files shared between skills from the commons skill into the others.
+"""Copy files that must exist in several shipped places from their single source.
 
-Each skill installs on its own, so a script two skills need must exist in
-both; links don't survive installers. The commons skill holds the source of
-truth. Edit files there, then run:
+Each plugin, and each skill inside it, installs without the rest of the repo,
+so a file two of them need must exist in both; links don't survive installers.
+Sources of truth: the root LICENSE, and the commons skill for shared scripts.
+Edit the source, then run:
 
     python3 tools/sync_shared.py           # copy
     python3 tools/sync_shared.py --check   # fail if any copy differs (CI, pre-commit)
@@ -13,30 +14,24 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "plugins/commons/skills/commons"
-# skill directory -> files (relative to the skill root) copied from SOURCE
-SHARED = {
-    ROOT / "plugins/commons-maintainer/skills/commons-maintainer": [
-        "LICENSE",
-        "assets/submission.schema.json",
-        "scripts/check_submission.py",
-        "scripts/search.py",
-        "scripts/version.py",
-    ],
-}
+COMMONS = ROOT / "plugins/commons/skills/commons"
+MAINTAINER = ROOT / "plugins/commons-maintainer/skills/commons-maintainer"
+
+# (source, copy) pairs; a copy whose plugin or skill doesn't exist yet is skipped
+SHARED = [(ROOT / "LICENSE", ROOT / "plugins" / p / "LICENSE") for p in ("commons", "commons-maintainer")]
+SHARED += [(ROOT / "LICENSE", skill / "LICENSE") for skill in (COMMONS, MAINTAINER)]
+SHARED += [(COMMONS / rel, MAINTAINER / rel) for rel in (
+    "assets/submission.schema.json",
+    "scripts/check_submission.py",
+    "scripts/search.py",
+    "scripts/version.py",
+)]
 
 
 def stale():
-    """(target, source) pairs whose target is missing or differs."""
-    out = []
-    for skill, files in SHARED.items():
-        if not skill.is_dir():
-            continue
-        for rel in files:
-            src, dst = SOURCE / rel, skill / rel
-            if not dst.is_file() or dst.read_bytes() != src.read_bytes():
-                out.append((dst, src))
-    return out
+    """(copy, source) pairs whose copy is missing or differs."""
+    return [(dst, src) for src, dst in SHARED
+            if dst.parent.parent.is_dir() and (not dst.is_file() or dst.read_bytes() != src.read_bytes())]
 
 
 def main():
