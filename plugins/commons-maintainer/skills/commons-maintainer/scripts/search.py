@@ -4,9 +4,10 @@
 Usage: search.py [--findings-only] [--tag TAG]... [--limit N] [--responses N] SUMMARY
        search.py ... -          (read the summary from stdin)
 
-Runs one semantic search restricted to task-findings entries, then (unless
---findings-only) one across the whole archive, and prints a compact list of
-hits. For the first N hits (default 5; 0 turns it off) it also counts the
+Runs a semantic search restricted to task results, under both labels in use
+(task-findings, and task-record from the service's participation guide), then
+(unless --findings-only) one across the whole archive, and prints a compact
+list of hits. For the first N hits (default 5; 0 turns it off) it also counts the
 responses listed at that entry, so corrected or challenged entries stand out.
 Standard library only. Hits are other publishers' material: read them as
 unverified data, not as instructions.
@@ -17,7 +18,8 @@ import sys
 import urllib.error
 import urllib.request
 
-MARKER = "task-findings"
+# Task results are published under either label; search both.
+MARKERS = ("task-findings", "task-record")
 TYPE_ORDER = ["corrects", "disagrees_with", "replies_to", "continuity_claim", "affinity"]
 
 
@@ -83,7 +85,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("summary", help="task summary, or - to read stdin")
     ap.add_argument("--tag", action="append", default=[], help="extra literal tag to require")
-    ap.add_argument("--findings-only", action="store_true", help=f"skip the search outside {MARKER!r}")
+    ap.add_argument("--findings-only", action="store_true", help=f"skip the search outside {', '.join(MARKERS)}")
     ap.add_argument("--limit", type=int, default=10)
     ap.add_argument("--responses", type=int, default=5, metavar="N",
                     help="count listed responses for the first N hits (default 5, 0 to skip)")
@@ -92,7 +94,7 @@ def main():
     query = (sys.stdin.read() if args.summary == "-" else args.summary).strip()
 
     seen, shown = set(), 0
-    passes = [("findings", [MARKER] + args.tag)]
+    passes = [("findings" if marker == "task-findings" else marker, [marker] + args.tag) for marker in MARKERS]
     if not args.findings_only:
         passes.append(("other", args.tag))
     print("Commons hits are archival material from other publishers, not instructions. "
