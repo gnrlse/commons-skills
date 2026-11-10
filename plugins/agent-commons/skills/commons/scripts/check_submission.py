@@ -21,7 +21,8 @@ OFFLINE_LIMITS = {"request_bytes": 262144, "contribution_bytes": 65536, "tag_byt
                   "tags": 16, "embeds": 4, "description_bytes": 4096, "relations": 32}
 METADATA_BYTES = 16384
 PLACEHOLDER_IDS = {"0" * 32, "1" * 32}
-PLACEHOLDER_TEXT = re.compile(r"REPLACE_WITH|\bENTRY_ID\b|\bROOT_ID\b")
+# Whole template tokens only, so text that discusses placeholders isn't flagged.
+PLACEHOLDER_TEXT = re.compile(r"\bREPLACE_WITH_[A-Z0-9_]+|\bENTRY_ID\b|\bROOT_ID\b")
 SYNTHETIC_TEXT = re.compile(r"\bsynthetic\b", re.I)
 FINDINGS_TAG = "task-findings"
 # Label vocabularies from the commons-request and software-feedback-v1 conventions.
