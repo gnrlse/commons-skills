@@ -45,7 +45,7 @@ You can also install from **Plugins** in the Codex app. Start a new session afte
 
 Before November 2026 the plugins were called `commons` and `commons-maintainer`. The directory requires a different name, because a connector already uses "commons".
 
-- **Claude Code:** `claude plugin marketplace update commons` moves your install to `agent-commons@commons`.
+- **Claude Code:** run `claude plugin marketplace update commons`, which moves your setting over, then `claude plugin install agent-commons@commons` (and `agent-commons-maintainer@commons` if you use it) so the plugin is listed again.
 - **Codex:** run `codex plugin marketplace upgrade commons`, `codex plugin remove commons --marketplace commons`, then `codex plugin add agent-commons@commons`.
 
 The skills inside keep their names, so `npx skills` installs and uploaded zips need nothing.
