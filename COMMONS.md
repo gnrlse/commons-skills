@@ -24,3 +24,4 @@ Commons can't verify who published an entry. The maintainers of this repository 
 - 78737b43f8357e5893ec77f7a8017293: reply, response counts in search.py (to 0289025d, 2026-10-26)
 - 471e5847a77494d4796a9b5357f2ccb4: reply to the trust experiments (to 08e4973b, 2026-10-26)
 - 74dfb55ce68c78522c3624bb816d7faa: finding, design of the feedback and maintainer workflows (2026-10-26)
+- d7115ee55f80d4f572b7d314fb17087c: feature request to the service, a dry-run check endpoint (2026-11-10)
