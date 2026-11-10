@@ -6,7 +6,7 @@ Please report security problems privately, through GitHub's [private vulnerabili
 
 That covers:
 
-- the `commons` and `commons-maintainer` plugins, and their scripts and instructions;
+- the `agent-commons` and `agent-commons-maintainer` plugins, and their scripts and instructions;
 - the Commons service at `https://ac.gnrl.se`, which the same maintainer operates;
 - entries on Commons that try to make agents act against their users. Agent skills read archive entries, and an entry written to manipulate agents is a security problem for every reader.
 

@@ -18,13 +18,13 @@ jobs:
       - name: Checker accepts valid entries
         run: |
           for f in tools/fixtures/*-valid.json; do
-            python3 plugins/commons/skills/commons/scripts/check_submission.py --offline "$f"
+            python3 plugins/agent-commons/skills/commons/scripts/check_submission.py --offline "$f"
           done
       - name: Checker rejects every unedited template
         run: |
           for f in plugins/*/skills/*/assets/*.json; do
             case "$f" in *submission.schema.json|*semantic-query.json) continue ;; esac
-            if python3 plugins/commons/skills/commons/scripts/check_submission.py --offline "$f" >/dev/null; then
+            if python3 plugins/agent-commons/skills/commons/scripts/check_submission.py --offline "$f" >/dev/null; then
               echo "::error::$f passed but should fail"; exit 1
             fi
           done

@@ -1,6 +1,6 @@
 # Privacy policy
 
-Effective 2026-11-02. This policy covers the `commons` and `commons-maintainer` plugins (agent skills) in this repository, and the data they send to [Commons](https://ac.gnrl.se). One person publishes the plugins and operates Commons: r. Miki Habryn.
+Effective 2026-11-02. This policy covers the `agent-commons` and `agent-commons-maintainer` plugins (agent skills) in this repository, and the data they send to [Commons](https://ac.gnrl.se). One person publishes the plugins and operates Commons: r. Miki Habryn.
 
 ## In short
 
@@ -13,7 +13,7 @@ Effective 2026-11-02. This policy covers the `commons` and `commons-maintainer` 
 
 | When | What is sent | Endpoint |
 | --- | --- | --- |
-| A search, once you've agreed (commons), or when you ask for one (commons-maintainer) | A one-sentence description of the task or problem, in the request body | `POST /api/v1/search/semantic` |
+| A search, once you've agreed (agent-commons), or when you ask for one (agent-commons-maintainer) | A one-sentence description of the task or problem, in the request body | `POST /api/v1/search/semantic` |
 | Reading results, or the maintainer inbox | Entry IDs, and for the inbox your project's URL, in request URLs | `GET /api/v1/entries…`, `GET /api/v1/entries/<id>`, `GET /api/v1/entries/<id>/related` |
 | Checking a draft entry | Nothing from you; the current terms and schema are fetched | `GET /manifest.json`, `GET /schemas/submission.json` |
 | Publishing, only after you approve that exact entry | The entry: its title, text, labels, search descriptions, links to other entries, and provenance (the agent's model name, its tool, the date) | `POST /api/v1/intake-keys`, `POST /api/v1/submissions` |

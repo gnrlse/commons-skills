@@ -1,13 +1,13 @@
 # Agent Instructions
 
-This repository develops and ships two agent skills for [Commons](https://ac.gnrl.se): **commons** (the task loop, plus filing feedback) and **commons-maintainer** (triaging feedback about a project). These instructions are for agents *working on this repo*. They are not part of the skills.
+This repository develops and ships two plugins for [Commons](https://ac.gnrl.se): **agent-commons**, with the `commons` skill (the task loop, plus filing feedback), and **agent-commons-maintainer**, with the `commons-maintainer` skill (triaging feedback about a project). These instructions are for agents *working on this repo*. They are not part of the plugins.
 
 ## What ships, and what doesn't
 
 | Path | Audience | Ships? |
 | --- | --- | --- |
-| `plugins/<name>/` | Agents and the plugin directory | **Yes**. Plugin installs (Claude Code, Codex, the directory) get the whole plugin folder |
-| `plugins/<name>/skills/<name>/` | Agents that install just the skill | **Yes**. `npx skills`, zips and manual copies get only this folder |
+| `plugins/<plugin>/` | Agents and the plugin directory | **Yes**. Plugin installs (Claude Code, Codex, the directory) get the whole plugin folder |
+| `plugins/<plugin>/skills/<skill>/` | Agents that install just the skill | **Yes**. `npx skills`, zips and manual copies get only this folder |
 | `.claude-plugin/`, `.agents/plugins/` | Claude Code and Codex marketplaces | Read by installers, not installed |
 | Everything else (`.beads/`, `tools/`, `docs/`, this file, `CLAUDE.md`, `COMMONS.md`) | Contributors and readers of this repo | No |
 
@@ -28,27 +28,28 @@ python3 tools/check_packaging.py         # every install route finds every skill
 
 ## Shared files
 
-Some files exist in several shipped places, because each plugin and each skill installs alone and links don't survive installers. The sources of truth are the root `LICENSE` and `plugins/commons/skills/commons/` for shared scripts. Edit there, then run `python3 tools/sync_shared.py` to copy into the other skills. The list is in that script, and `check_packaging.py` fails if a copy drifts.
+Some files exist in several shipped places, because each plugin and each skill installs alone and links don't survive installers. The sources of truth are the root `LICENSE` and `plugins/agent-commons/skills/commons/` for shared scripts. Edit there, then run `python3 tools/sync_shared.py` to copy into the other skills. The list is in that script, and `check_packaging.py` fails if a copy drifts.
 
 ## Packaging and releases
 
 Users install from `gnrlse/commons-skills`; README.md has the commands.
 
-- **Layout:** each skill is at `plugins/<name>/skills/<name>/SKILL.md`, the standard plugin layout. Don't go back to a plugin root that is itself the skill. Claude Code loads that layout, but Codex doesn't find it (Commons entry baad75331bba944aab566259ef5b0ea5).
+- **Layout:** each skill is at `plugins/<plugin>/skills/<skill>/SKILL.md`, the standard plugin layout. Don't go back to a plugin root that is itself the skill. Claude Code loads that layout, but Codex doesn't find it (Commons entry baad75331bba944aab566259ef5b0ea5).
+- **Names:** plugins are `agent-commons` and `agent-commons-maintainer`, because a directory connector already owns the name "commons". The skills keep their names, `commons` and `commons-maintainer`. The marketplace is still `commons`, so install IDs are `agent-commons@commons`. `.claude-plugin/marketplace.json` has a `renames` map from the old plugin names, which moves existing Claude Code installs over; never reuse an old name. Plugin names are permanent once listed.
 - **Claude Code** reads `.claude-plugin/marketplace.json`. Check it with `claude plugin validate .`.
 - **Codex** reads `.agents/plugins/marketplace.json` and ignores the Claude file whenever this one exists. Keep the two files listing the same plugins and sources; `check_packaging.py` compares them.
 - **The skills CLI** (`npx skills add`) searches `<source>/skills/` for each local plugin entry in the Claude marketplace file.
 - **claude.ai and Claude Desktop:** `tools/build_zip.py` builds `dist/<skill>.zip` for each skill. Pushing a `v*` tag runs `.github/workflows/release.yml`, which attaches the zips to a GitHub release, so the README's `releases/latest/download/<skill>.zip` links always point at the newest ones.
 - **Versions:** leave `version` unset in both marketplaces. Claude Code then tracks commits, and Codex reinstalls on `codex plugin marketplace upgrade`.
 - **Licenses:** each plugin's and each skill's `LICENSE` duplicates the root LICENSE, because each installs without the rest of the repo.
-- **Anthropic's plugin directory:** each plugin folder is its own submission at claude.ai/directory/manage, with the plugin path `plugins/<name>`. The plugin's `README.md` is the listing text, and the security scan rejects behaviour it doesn't disclose, so keep its "What it sends, and where" table and PRIVACY.md in step with the scripts. The listing icon is captured once, at the first save in the portal: change `tools/make_icon.py` and rerun it before that, never after. `version` stays unset (the portal warns, and accepts it). Run `claude plugin validate plugins/<name>` to see the directory checks the CLI can run.
+- **Anthropic's plugin directory:** each plugin folder is its own submission at claude.ai/directory/manage, with the plugin path `plugins/<plugin>`. The plugin's `README.md` is the listing text, and the security scan rejects behaviour it doesn't disclose, so keep its "What it sends, and where" table and PRIVACY.md in step with the scripts. The listing icon is captured once, at the first save in the portal: change `tools/make_icon.py` and rerun it before that, never after. `version` stays unset (the portal warns, and accepts it). Run `claude plugin validate plugins/<name>` to see the directory checks the CLI can run.
 
 ## Maintaining this project on Commons
 
 Feedback about these skills arrives on Commons, labelled `software=https://github.com/gnrlse/commons-skills`. Triage it with the maintainer skill from this checkout:
 
 ```bash
-python3 plugins/commons-maintainer/skills/commons-maintainer/scripts/inbox.py --software https://github.com/gnrlse/commons-skills
+python3 plugins/agent-commons-maintainer/skills/commons-maintainer/scripts/inbox.py --software https://github.com/gnrlse/commons-skills
 ```
 
 Every entry published on the project's behalf goes into `COMMONS.md` under "Maintainer entries", in a commit pushed after publishing. That list is how readers verify a reply came from the maintainers. Publishing still needs the user's approval for each entry. The reasoning behind these conventions is in `docs/feedback-design.md`.

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "commons",
+      "name": "agent-commons",
       "source": {
         "source": "local",
-        "path": "./plugins/commons"
+        "path": "./plugins/agent-commons"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -26,10 +26,10 @@
       ]
     },
     {
-      "name": "commons-maintainer",
+      "name": "agent-commons-maintainer",
       "source": {
         "source": "local",
-        "path": "./plugins/commons-maintainer"
+        "path": "./plugins/agent-commons-maintainer"
       },
       "policy": {
         "installation": "AVAILABLE",

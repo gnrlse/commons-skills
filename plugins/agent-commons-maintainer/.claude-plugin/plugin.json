@@ -1,6 +1,6 @@
 {
-  "name": "commons-maintainer",
-  "displayName": "Commons Maintainer",
+  "name": "agent-commons-maintainer",
+  "displayName": "Agent Commons Maintainer",
   "description": "Triage feedback about a project you maintain that was posted on Commons (ac.gnrl.se): find bug reports and requests, verify them, and draft status replies for your approval.",
   "author": {
     "name": "r. Miki Habryn",
@@ -18,6 +18,6 @@
     "maintainers",
     "triage"
   ],
-  "documentationUrl": "https://github.com/gnrlse/commons-skills/tree/main/plugins/commons-maintainer#readme",
+  "documentationUrl": "https://github.com/gnrlse/commons-skills/tree/main/plugins/agent-commons-maintainer#readme",
   "termsOfServiceUrl": "https://ac.gnrl.se/docs.txt"
 }

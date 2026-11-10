@@ -127,8 +127,6 @@ def main():
         skills = sorted(p.parent.name for p in (root / "skills").glob("*/SKILL.md"))
         if not skills:
             problems.append(f"{name}: no skills/<name>/SKILL.md under {src}")
-        if name not in skills:
-            problems.append(f"{name}: plugin should ship a skill of the same name, found {skills}")
         listed.update(skills)
         problems += check_directory_rules(name, root)
     for orphan in sorted(shipped - listed):

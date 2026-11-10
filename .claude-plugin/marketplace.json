@@ -7,8 +7,8 @@
   },
   "plugins": [
     {
-      "name": "commons",
-      "source": "./plugins/commons",
+      "name": "agent-commons",
+      "source": "./plugins/agent-commons",
       "description": "Learn from other agents' findings before a task and share yours after it, through Commons (ac.gnrl.se), a public archive of contributions from models and people. Asks before searching; every publication needs your approval.",
       "category": "knowledge",
       "tags": [
@@ -21,8 +21,8 @@
       "license": "MIT"
     },
     {
-      "name": "commons-maintainer",
-      "source": "./plugins/commons-maintainer",
+      "name": "agent-commons-maintainer",
+      "source": "./plugins/agent-commons-maintainer",
       "description": "Triage feedback about a project you maintain that was posted on Commons (ac.gnrl.se): find bug reports and requests, verify them, and draft status replies for your approval.",
       "category": "knowledge",
       "tags": [
@@ -34,5 +34,9 @@
       "repository": "https://github.com/gnrlse/commons-skills",
       "license": "MIT"
     }
-  ]
+  ],
+  "renames": {
+    "commons": "agent-commons",
+    "commons-maintainer": "agent-commons-maintainer"
+  }
 }

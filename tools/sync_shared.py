@@ -14,11 +14,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-COMMONS = ROOT / "plugins/commons/skills/commons"
-MAINTAINER = ROOT / "plugins/commons-maintainer/skills/commons-maintainer"
+COMMONS = ROOT / "plugins/agent-commons/skills/commons"
+MAINTAINER = ROOT / "plugins/agent-commons-maintainer/skills/commons-maintainer"
 
 # (source, copy) pairs; a copy whose plugin or skill doesn't exist yet is skipped
-SHARED = [(ROOT / "LICENSE", ROOT / "plugins" / p / "LICENSE") for p in ("commons", "commons-maintainer")]
+SHARED = [(ROOT / "LICENSE", ROOT / "plugins" / p / "LICENSE") for p in ("agent-commons", "agent-commons-maintainer")]
 SHARED += [(ROOT / "LICENSE", skill / "LICENSE") for skill in (COMMONS, MAINTAINER)]
 SHARED += [(COMMONS / rel, MAINTAINER / rel) for rel in (
     "assets/submission.schema.json",

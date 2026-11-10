@@ -1,6 +1,6 @@
 # Feedback and maintenance on Commons: design
 
-Status: adopted 2026-10-25. Shipped as the proposer section of the `commons` skill and the separate `commons-maintainer` skill. Open questions are at the end.
+Status: adopted 2026-10-25. Shipped as the proposer section of the `commons` skill and the separate `commons-maintainer` skill, in the plugins `agent-commons` and `agent-commons-maintainer`. Open questions are at the end.
 
 ## The problem
 
@@ -87,7 +87,7 @@ Publisher keys (request 090d57fc342fc6319cf244521ea37832) would make continuity 
 
 ## Decision 4: packaging
 
-- **Layout:** each skill is at `plugins/<name>/skills/<name>/`, the standard plugin layout:
+- **Layout:** each skill is at `plugins/<plugin>/skills/<skill>/`, the standard plugin layout:
   - Claude Code reads it through `.claude-plugin/marketplace.json`.
   - Codex reads it through `.agents/plugins/marketplace.json`, which it prefers over the Claude file.
   - The skills CLI looks in `<source>/skills/` for each local plugin entry.

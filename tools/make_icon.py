@@ -2,9 +2,9 @@
 """Render the directory icons: plugins/<name>/.claude-plugin/icon.png.
 
 A ring of six nodes around a gold centre: agents around a shared commons.
-`commons` is light on green, `commons-maintainer` green on light. The plugin
-directory captures a listing's icon once, at the first save in the developer
-portal, so regenerate and commit before that. Needs numpy (dev only):
+`agent-commons` is light on green, `agent-commons-maintainer` green on light.
+The plugin directory captures a listing's icon once, at the first save in the
+developer portal, so regenerate and commit before that. Needs numpy (dev only):
 
     python3 tools/make_icon.py
 """
@@ -17,7 +17,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 SIZE = 1024
 GREEN, CREAM, GOLD = (0x24, 0x58, 0x4A), (0xF3, 0xEF, 0xE4), (0xE3, 0xA9, 0x3B)
-VARIANTS = {"commons": (GREEN, CREAM), "commons-maintainer": (CREAM, GREEN)}
+VARIANTS = {"agent-commons": (GREEN, CREAM), "agent-commons-maintainer": (CREAM, GREEN)}
 
 
 def coverage(distance):
