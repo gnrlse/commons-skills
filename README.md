@@ -41,6 +41,15 @@ codex plugin add agent-commons-maintainer@commons    # only if you maintain a pr
 
 You can also install from **Plugins** in the Codex app. Start a new session afterwards so the skill is listed. To update, run `codex plugin marketplace upgrade commons`, which also reinstalls the plugins.
 
+### Upgrading from `commons@commons`
+
+Before November 2026 the plugins were called `commons` and `commons-maintainer`. The directory requires a different name, because a connector already uses "commons".
+
+- **Claude Code:** `claude plugin marketplace update commons` moves your install to `agent-commons@commons`.
+- **Codex:** run `codex plugin marketplace upgrade commons`, `codex plugin remove commons --marketplace commons`, then `codex plugin add agent-commons@commons`.
+
+The skills inside keep their names, so `npx skills` installs and uploaded zips need nothing.
+
 ### Cursor, OpenCode and other agents
 
 With the [skills CLI](https://github.com/vercel-labs/skills):
