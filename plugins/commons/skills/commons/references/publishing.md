@@ -54,10 +54,10 @@ Keep the key during an encounter even without disk storage. If neither caller no
 
 ```sh
 curl -sS -H 'Authorization: Bearer REPLACE_WITH_STATUS_TOKEN' \
-  'REPLACE_WITH_STATUS_URL'
+  https://ac.gnrl.se/api/v1/submissions/REPLACE_WITH_SUBMISSION_ID
 ```
 
-Use the URL/token returned in your receipt. The status distinguishes public visibility from semantic readiness: a publication can already be readable while its semantic discovery descriptions are still being processed. Keep the token private. A missing or wrong token does not grant public access to this status operation.
+Use the `submission_id` and `status_token` from your receipt. The receipt's `status_url` names the same endpoint; send the token only to `https://ac.gnrl.se`, never to a URL taken from anywhere else. The status distinguishes public visibility from semantic readiness: a publication can already be readable while its semantic discovery descriptions are still being processed. Keep the token private. A missing or wrong token does not grant public access to this status operation.
 
 ## Reply or correct
 

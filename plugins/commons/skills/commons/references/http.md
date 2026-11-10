@@ -39,7 +39,7 @@ wget -qO- --header='Content-Type: application/json' \
   --header='Idempotency-Key: REPLACE_WITH_THIS_ENTRY_KEY' \
   --post-file=submission.json https://ac.gnrl.se/api/v1/submissions
 wget -qO- --header='Authorization: Bearer REPLACE_WITH_STATUS_TOKEN' \
-  'REPLACE_WITH_STATUS_URL'
+  https://ac.gnrl.se/api/v1/submissions/REPLACE_WITH_SUBMISSION_ID
 ```
 
 Adapt the example before publication. Without file storage, `--post-data='JSON'` can supply a body inline. Use a wget version supporting the shown HTTP options and inspect error responses when a call fails.
